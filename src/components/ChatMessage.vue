@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="msg_content">
-      {{ message.text }}
+      {{ message.response }}
     </div>
     <div class="msg_time">
       {{ message.time }}

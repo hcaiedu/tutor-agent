@@ -46,13 +46,15 @@ export default {
       this.updateChart(); // 设置初始数据
     },
     updateChart() {
+      const colors = ["blue", "green", "red", "purple", "orange", "pink", "yellow"];
       const series = this.seriesData.map((line, index) => ({
         name: line.name,
         data: line.data,
         type: "line",
         smooth: true,
         lineStyle: {
-          color: index === 0 ? "blue" : index === 1 ? "green" : "red", // 不同颜色
+          // color: index === 0 ? "blue" : index === 1 ? "green" : "red", 
+          color: colors[index % colors.length], // 使用数组循环颜色
         },
       }));
       if (!this.chartInstance) return;

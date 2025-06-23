@@ -276,6 +276,7 @@ import { create_room } from '@/api/roomApi';
             align-items: center;
             margin-bottom: 20px;
             .btn {
+              cursor: pointer;
               width: 100%;
               height: 50px;
               background: #1B5E20;
