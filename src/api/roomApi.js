@@ -37,3 +37,10 @@ export const update_message = function(params) {
     params
   )
 }
+
+export const get_agent_message = function(params) {
+  return request.post(
+    '/room/get_agent_message',
+    params
+  )
+}

@@ -12,6 +12,7 @@
           </div>
           <div class="chat_input">
             <input v-model="newMessage" @keyup.enter="sendMessage" placeholder="Type in message..." />
+            <button @click="agentResponse">AI Response</button>
             <button @click="sendMessage">Send</button>
           </div>
         </div>
@@ -98,7 +99,7 @@
 
 <script>
 import { get_cognitive, get_user_info, update_cognitive } from '@/api/userApi';
-import { get_room_info, update_message } from '@/api/roomApi';
+import { get_room_info, update_message, get_agent_message } from '@/api/roomApi';
 import ChatMessage from '@/components/ChatMessage.vue';
 import Radar from '@/components/Radar.vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -113,6 +114,7 @@ export default {
       userInfo: {},
       roomInfo: {},
       newMessage: "",
+      agent_response: {},
       messages: "",
       isCollapsed: false,
       isCollapsedTracing: true,
@@ -170,12 +172,19 @@ export default {
     sendMessage() {
       if (this.newMessage.trim() === '') return;
       const message = {
+        date: this.get_date(),
+        time: new Date().toLocaleTimeString(),
         userId: this.userInfo.userId,
         userName: this.userInfo.userName,
         userAvatar: this.userInfo.userAvatar,
         response: this.newMessage,
-        time: new Date().toLocaleTimeString(),
-        date: this.get_date()
+        "received_information": this.agent_response["received_information"],
+        "response": this.newMessage,
+        "self-regulation": this.agent_response["self-regulation"],
+        "reason for self-regulation": this.agent_response["reason for self-regulation"],
+        "co-regulation": this.agent_response["co-regulation"],
+        "reason for co-regulation": this.agent_response["reason for co-regulation"],
+        "student_response_raw": this.agent_response["student_response_raw"],
       };
       this.$socket.emit('send_message', { userName: this.userInfo.userName, message: message, roomId: this.roomInfo["_id"] });
       this.newMessage = '';
@@ -199,6 +208,19 @@ export default {
       }
       this.$socket.emit("join", params);
     },
+    agentResponse() {
+      const params = {
+        "user_id": this.userInfo.userId,
+        "room_id": this.roomInfo._id
+      }
+      get_agent_message(params).then(res => {
+        // this.userInfo = res.data;
+        this.agent_response = res.data;
+        this.newMessage = res.data.message;
+      }).catch(err => {
+        console.error("Error:", err);
+      });
+    }
   },
   watch: {
     messages() {
@@ -226,7 +248,6 @@ export default {
     });
     get_room_info(this.$route.query.roomId).then(res => {
       this.roomInfo = res.data;
-      console.log(this.roomInfo.history)
     }).catch(err => {
       console.error("Error:", err);
     });
@@ -234,7 +255,6 @@ export default {
   mounted() {
     this.scrollToBottom();
     this.$socket.on('receive_message', (message) => {
-      console.log(message)
       this.roomInfo.history.push(message);
       this.scrollToBottom();
     });
