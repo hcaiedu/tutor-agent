@@ -55,7 +55,7 @@
             </div>
           </div>
           <div class="radio">
-            <div class="inputName">Assertiveness</div>
+            <div class="inputName">Role</div>
             <div class="radio-container">
               <label v-for="option in roleOptions" :key="option.value" class="radio-option"
                 :class="{ 'selected': registerInfo.mode === option.value }">
@@ -130,7 +130,6 @@ export default {
     },
     goRegister() {
       register(this.$data.registerInfo).then(res => {
-        console.log(res)
         if (res.data.status == 'success') {
           if (res.data.mode == 'teacher') {
             this.$router.push(
@@ -143,7 +142,6 @@ export default {
             )
           }
           if (res.data.mode == 'student') {
-            console.log('ahahahahah')
             this.$router.push(
               {
                 name: "roomjoin",

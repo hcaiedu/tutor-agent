@@ -36,13 +36,14 @@
             <div class="inputName">Assertiveness</div>
             <div class="radio-container">
               <label class="radio-option"><input type="radio" value="Low" v-model="roomInfo.assertiveness">Low</label>
-              <label class="radio-option"><input type="radio" value="Midium" v-model="roomInfo.assertiveness">Midium</label>
+              <label class="radio-option"><input type="radio" value="Midium"
+                  v-model="roomInfo.assertiveness">Midium</label>
               <label class="radio-option"><input type="radio" value="High" v-model="roomInfo.assertiveness">High</label>
             </div>
           </div>
           <div class="textarea">
             <div class="inputName">Discussion Topic</div>
-            <textarea type="text" v-model="roomInfo.topic"/>
+            <textarea type="text" v-model="roomInfo.topic" />
           </div>
           <div class="btn-container">
             <div class="btn" @click="goCreate">Create</div>
@@ -55,99 +56,156 @@
 
 <script>
 import { create_room } from '@/api/roomApi';
-  export default {
-    data() {
-      return {
-        roomInfo: {
-          roomName: '',
-          roomCustomName: '',
-          memberNum: '',
-          chatTime: '',
-          assertiveness: '',
-          topic: ''
-        }
-      }
-    },
-    methods: {
-      goCreate() {
-        create_room(this.$data.roomInfo).then(res => {
-          if(res.data.roomId) {
-            this.$router.push(
-            {
-              name: "roomjoin",
-              query: {
-                roomId: res.data.roomId
-              }
-            }
-          )
-          }
-        }).catch(err => {
-          console.error("Error:", err);
-        });
+export default {
+  data() {
+    return {
+      roomInfo: {
+        roomName: '',
+        roomCustomName: '',
+        memberNum: '',
+        chatTime: '',
+        assertiveness: '',
+        topic: ''
       }
     }
+  },
+  methods: {
+    goCreate() {
+      create_room(this.$data.roomInfo).then(res => {
+        if (res.data.roomId) {
+          const roomId = res.data.roomId;
+          // Create a temporary textarea for copy operation
+          const copyTextarea = document.createElement('textarea');
+          copyTextarea.value = roomId;
+          document.body.appendChild(copyTextarea);
+          copyTextarea.select();
+          try {
+            // Try to execute the copy command
+            const successful = document.execCommand('copy');
+            const msg = successful ? 'Copied to clipboard!' : 'Copy failed, please copy manually';
+            // Display a prompt box containing the copied result
+            alert(`Room creation successful!\nRoom ID: ${roomId}\n\n${msg}`);
+          } catch (err) {
+            // Browser compatible with browsers that do not support copying
+            alert(`Room creation successful!\nRoom ID: ${roomId}\n\nPlease manually copy the room ID`);
+          } finally {
+            // Clean DOM
+            document.body.removeChild(copyTextarea);
+          }
+        }
+      }).catch(err => {
+        console.error("Error:", err);
+        alert('房间创建失败，请重试'); // 添加错误提示
+      });
+    }
   }
+}
 </script>
 
 <style lang="scss" scoped>
-  .background {
-    width: 100%;
-    height: 100vh;
-    background: #E8F5E9;
-    margin: 0;
-    padding: 0;
+.background {
+  width: 100%;
+  height: 100vh;
+  background: #E8F5E9;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .container {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    .container {
-      display: flex;
-      width: 80%;
-      max-width: 1200px;
-      background: #FFFFFF;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      padding: 20px;
-      .left {
-        width: 50%;
-        padding: 5% 0;
-        .illustration {
-          width: 80%;
-          margin: 50px auto;
-          img {
-            width: 100%;
-            height: 100%;
-          }
-        }
-        .caption {
-          // width: 80%;
-          color: #1B5E20;
-          font-size: 32px;
-          font-weight: 800;
-          margin: 50px auto;
-          text-align: center;
+    width: 80%;
+    max-width: 1200px;
+    background: #FFFFFF;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+
+    .left {
+      width: 50%;
+      padding: 5% 0;
+
+      .illustration {
+        width: 80%;
+        margin: 50px auto;
+
+        img {
+          width: 100%;
+          height: 100%;
         }
       }
-      .right {
-        width: 50%;
-        // padding-left: 30px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        .form {
-          width: 80%;
+
+      .caption {
+        // width: 80%;
+        color: #1B5E20;
+        font-size: 32px;
+        font-weight: 800;
+        margin: 50px auto;
+        text-align: center;
+      }
+    }
+
+    .right {
+      width: 50%;
+      // padding-left: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .form {
+        width: 80%;
+
+        // display: flex;
+        // // justify-content: center;
+        // align-items: center;
+        .title {
+          color: #1B5E20;
+          font-size: 26px;
+          font-weight: 800;
+          margin: 20px auto;
+          text-align: center;
+        }
+
+        .input {
+          margin: 20px auto;
+
           // display: flex;
-          // // justify-content: center;
-          // align-items: center;
-          .title {
+          .inputName {
+            margin-bottom: 5px;
+            // background: #38783e;
             color: #1B5E20;
-            font-size: 26px;
-            font-weight: 800;
-            margin: 20px auto;
-            text-align: center;
+            // text-align: center;
+            height: 30px;
+            line-height: 30px;
+            font-size: 16px;
+            padding: 5px 10px;
+            font-weight: 600;
+            // border-top-left-radius: 5px;
+            // border-top-right-radius: 5px;
+            width: 150px;
           }
-          .input {
-            margin: 20px auto;
-            // display: flex;
+
+          input {
+            width: 90%;
+            padding: 10px 5%;
+            font-size: 16px;
+            border-radius: 5px;
+            border: #1B5E20 1px solid;
+
+            &:focus {
+              outline: none;
+            }
+          }
+        }
+
+        .short-input-container {
+          display: flex;
+          justify-content: space-between;
+
+          .shortInput {
+            width: 45%;
+
             .inputName {
               margin-bottom: 5px;
               // background: #38783e;
@@ -160,135 +218,117 @@ import { create_room } from '@/api/roomApi';
               font-weight: 600;
               // border-top-left-radius: 5px;
               // border-top-right-radius: 5px;
-              width: 150px;
+              // width: 150px;
             }
+
             input {
               width: 90%;
               padding: 10px 5%;
               font-size: 16px;
               border-radius: 5px;
               border: #1B5E20 1px solid;
+
               &:focus {
-                outline:none;
+                outline: none;
               }
             }
           }
-          .short-input-container {
+        }
+
+        .textarea {
+          margin: 20px auto;
+
+          .inputName {
+            margin-bottom: 5px;
+            // background: #38783e;
+            color: #1B5E20;
+            // text-align: center;
+            height: 30px;
+            line-height: 30px;
+            font-size: 16px;
+            padding: 5px 10px;
+            font-weight: 600;
+            // border-top-left-radius: 5px;
+            // border-top-right-radius: 5px;
+            // width: 150px;
+          }
+
+          textarea {
+            width: 90%;
+            height: 100px;
+            padding: 10px 5%;
+            font-size: 16px;
+            border-radius: 5px;
+            border: #1B5E20 1px solid;
+
+            &:focus {
+              outline: none;
+            }
+          }
+        }
+
+        .radio {
+          margin: 20px auto;
+
+          .inputName {
+            margin-bottom: 5px;
+            // background: #38783e;
+            color: #1B5E20;
+            // text-align: center;
+            height: 30px;
+            line-height: 30px;
+            font-size: 16px;
+            padding: 5px 10px;
+            font-weight: 600;
+            // border-top-left-radius: 5px;
+            // border-top-right-radius: 5px;
+            // width: 150px;
+          }
+
+          .radio-container {
             display: flex;
             justify-content: space-between;
-            .shortInput {
-              width: 45%;
-              .inputName {
-                margin-bottom: 5px;
-                // background: #38783e;
-                color: #1B5E20;
-                // text-align: center;
-                height: 30px;
-                line-height: 30px;
-                font-size: 16px;
-                padding: 5px 10px;
-                font-weight: 600;
-                // border-top-left-radius: 5px;
-                // border-top-right-radius: 5px;
-                // width: 150px;
-              }
+
+            .radio-option {
+              margin: 0 30px;
+
               input {
-                width: 90%;
-                padding: 10px 5%;
+                width: 30px;
+                padding: 10px;
                 font-size: 16px;
                 border-radius: 5px;
                 border: #1B5E20 1px solid;
+
                 &:focus {
-                  outline:none;
+                  outline: none;
                 }
               }
-            }
-          }
-          
-          .textarea {
-            margin: 20px auto;
-            .inputName {
-              margin-bottom: 5px;
-              // background: #38783e;
-              color: #1B5E20;
-              // text-align: center;
-              height: 30px;
-              line-height: 30px;
-              font-size: 16px;
-              padding: 5px 10px;
-              font-weight: 600;
-              // border-top-left-radius: 5px;
-              // border-top-right-radius: 5px;
-              // width: 150px;
-            }
-            textarea {
-              width: 90%;
-              height: 100px;
-              padding: 10px 5%;
-              font-size: 16px;
-              border-radius: 5px;
-              border: #1B5E20 1px solid;
-              &:focus {
-                outline:none;
-              }
-            }
-          }
-          .radio {
-            margin: 20px auto;
-            .inputName {
-              margin-bottom: 5px;
-              // background: #38783e;
-              color: #1B5E20;
-              // text-align: center;
-              height: 30px;
-              line-height: 30px;
-              font-size: 16px;
-              padding: 5px 10px;
-              font-weight: 600;
-              // border-top-left-radius: 5px;
-              // border-top-right-radius: 5px;
-              // width: 150px;
             }
 
-            .radio-container {
-              display: flex;
-              justify-content: space-between;
-              .radio-option {
-                margin: 0 30px;
-                input {
-                  width: 30px;
-                  padding: 10px;
-                  font-size: 16px;
-                  border-radius: 5px;
-                  border: #1B5E20 1px solid;
-                  &:focus {
-                    outline:none;
-                  }
-                }
-              }
-              
-            }
-            
           }
-          .btn-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 20px;
-            .btn {
-              cursor: pointer;
-              width: 100%;
-              height: 50px;
-              background: #1B5E20;
-              color: #FFFFFF;
-              text-align: center;
-              line-height: 50px;
-              font-size: 16px;
-              border-radius: 5px;
-            }
+
+        }
+
+        .btn-container {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-bottom: 20px;
+
+          .btn {
+            cursor: pointer;
+            width: 100%;
+            height: 50px;
+            background: #1B5E20;
+            color: #FFFFFF;
+            text-align: center;
+            line-height: 50px;
+            font-size: 16px;
+            border-radius: 5px;
           }
         }
       }
     }
   }
+}
 </style>
