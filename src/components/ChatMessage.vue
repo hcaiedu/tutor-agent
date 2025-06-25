@@ -1,9 +1,9 @@
 <template>
   <div :class=
     "{
-      'message_agent': message.userId === 'u000',
-      'message_me': message.userId != 'u000' && message.userId == userId,
-      'message': message.userId != 'u000' && message.userId != userId,
+      'message_agent': message.userId === 'U001' ,
+      'message_me': message.userId != 'U001' && message.userId == userId,
+      'message': message.userId != 'U001' && message.userId != userId,
     }"
   >
     <div class="user">
