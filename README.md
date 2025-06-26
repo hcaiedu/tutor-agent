@@ -1,25 +1,54 @@
-# Tutor agent frontend
-## EDUHK LTTC Human Centric AI Group
+# Project Title
+**Tutor Agent Backend** by ***EDUHK LTTC Human Centric AI Group***
 
-### Customize configuration
+## Prerequisites
+Requirements for **NodeJS**
 
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-### Project Setup
-
+## Project Setup
 ```sh
 npm install
 ```
 
-### Compile and Hot-Reload for Development
-
+## Compile and Hot-Reload for Development
 ```sh
 npm run dev
 ```
 
-### Compile and Minify for Production
-
+## Compile and Minify for Production
 ```sh
 npm run build
 ```
 
+## Project Structure
+```
+tutor-agent
+├─ index.html
+├─ jsconfig.json
+├─ package-lock.json
+├─ package.json
+├─ public
+│  └─ favicon.ico
+├─ README.md
+├─ src
+│  ├─ api
+│  │  ├─ request.js
+│  │  ├─ roomApi.js
+│  │  └─ userApi.js
+│  ├─ App.vue
+│  ├─ assets //Images used in this project
+│  ├─ components //Vue components
+│  │  ├─ ChatMessage.vue //Real time chat message component
+│  │  ├─ LineChart.vue //line chart component
+│  │  └─ Radar.vue //radar chart component
+│  ├─ main.js //main entry
+│  ├─ router
+│  │  └─ index.js //url router
+│  └─ views //main pages in this system
+│     ├─ ChatView.vue //chat page
+│     ├─ HomeView.vue //replaced by login page
+│     ├─ LoginView.vue //login and register page
+│     ├─ RoomCreate.vue //room create page
+│     └─ RoomJoin.vue //room join page
+└─ vite.config.js
+
+```
