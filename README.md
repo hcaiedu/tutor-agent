@@ -1,5 +1,5 @@
 # Project Title
-**Tutor Agent Backend** by ***EDUHK LTTC Human Centric AI Group***
+**Tutor Agent Frontend** by ***EDUHK LTTC Human Centric AI Group***
 
 ## Prerequisites
 Requirements for **NodeJS**
@@ -30,10 +30,10 @@ tutor-agent
 │  └─ favicon.ico
 ├─ README.md
 ├─ src
-│  ├─ api
+│  ├─ api //APIs
 │  │  ├─ request.js
-│  │  ├─ roomApi.js
-│  │  └─ userApi.js
+│  │  ├─ roomApi.js //room API
+│  │  └─ userApi.js //user API
 │  ├─ App.vue
 │  ├─ assets //Images used in this project
 │  ├─ components //Vue components
